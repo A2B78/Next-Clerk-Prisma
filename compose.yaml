@@ -4,7 +4,7 @@ services:
       context: .
       dockerfile: Dockerfile
     ports:
-      - "5173:3000"
+      - "3000:3000"
     volumes:
       - .:/app
       - /app/node_modules
@@ -19,7 +19,9 @@ services:
     env_file:
       - .env
     depends_on:
-      - postgres # Ajout de la dépendance à PostgreSQL
+      - postgres
+    networks:
+      - mon-reseau
 
   postgres:
     image: postgres
@@ -28,10 +30,11 @@ services:
     environment:
       - POSTGRES_USER=${POSTGRES_USER}
       - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
-      - POSTGRES_DB=postgres${POSTGRES_DB}
+      - POSTGRES_DB=${POSTGRES_DB}
     env_file:
       - .env
-
+    networks:
+      - mon-reseau
   pgadmin:
     image: dpage/pgadmin4
     ports:
@@ -42,10 +45,16 @@ services:
     env_file:
       - .env
     depends_on:
-      - postgres # Ajout de la dépendance à PostgreSQL
+      - postgres
     volumes:
       - pgadmin-data:/var/lib/pgadmin
+    networks:
+      - mon-reseau
 
 volumes:
   postgres-data:
   pgadmin-data:
+
+networks:
+  mon-reseau:
+    driver: bridge
