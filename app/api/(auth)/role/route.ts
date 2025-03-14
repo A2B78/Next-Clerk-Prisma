@@ -1,4 +1,4 @@
-// app/api/auth/role/route.ts
+// app/api/(auth)/role/route.ts
 import { NextResponse } from 'next/server';
 import { auth } from '@clerk/nextjs/server';
 import { db } from '@/lib/db'; // Assurez-vous que le chemin est correct

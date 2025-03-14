@@ -1,4 +1,4 @@
-import { UserButton, SignedIn, SignedOut, SignInButton } from "@clerk/nextjs";
+import { UserButton, SignedIn, SignedOut, SignInButton, SignOutButton } from "@clerk/nextjs";
 // import { checkUser } from "@/lib/checkUser";
 
 const Navbar = async () => {
@@ -10,9 +10,11 @@ const Navbar = async () => {
       <div className="flex items-center space-x-4">
         <SignedIn>
           <UserButton />
+          <SignOutButton />
         </SignedIn>
         <SignedOut>
-          <SignInButton />
+          <SignInButton mode="modal"/>
+          
         </SignedOut>
       </div>
     </div>
