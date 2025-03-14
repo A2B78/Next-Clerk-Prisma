@@ -1,0 +1,61 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  user
+  admin
+}
+
+model User {
+  id            String         @id @default(uuid())
+  clerkUserId   String         @unique
+  email         String?
+  imageUrl      String?
+  name          String?
+  firstName     String?        @db.VarChar(255)
+  lastName      String?        @db.VarChar(255)
+  role          Role           @default(user)
+  profile       Profile?
+  userCredits   UserCredits?
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt @default(now())
+  lastSeenAt    DateTime?      @default(now())
+  creditsHistory CreditsHistory[]
+}
+
+model UserCredits {
+  id             String           @id @default(uuid())
+  userId         String           @unique
+  credits        Int              @default(0)
+  createdAt      DateTime         @default(now())
+  updatedAt      DateTime         @updatedAt @default(now())
+  user           User             @relation(fields: [userId], references: [id])
+  creditsHistory CreditsHistory[]
+}
+
+model Profile {
+  id           String   @id @default(uuid())
+  userId       String   @unique
+  bio          String?
+  profileImage String?
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt @default(now())
+  user         User     @relation(fields: [userId], references: [id])
+}
+
+model CreditsHistory {
+    id String @id @default(uuid())
+    userId String
+    user User @relation(fields: [userId], references: [id])
+    userCreditsId String
+    userCredits UserCredits @relation(fields:[userCreditsId], references: [id])
+    amount Int
+    description String?
+    createdAt DateTime @default(now())
+}
