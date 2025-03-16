@@ -1,8 +1,8 @@
-// lib/checkUser.ts
+// lib/checkUserServer.ts
 import { currentUser } from "@clerk/nextjs/server";
 import { db } from "@/lib/db";
 
-export const checkUser = async () => {
+export const checkUserServer = async () => {
     const user = await currentUser();
     if (!user) {
         return null;
@@ -10,15 +10,6 @@ export const checkUser = async () => {
     const loggedInUser = await db.user.findUnique({
         where: {
             clerkUserId: user.id,
-        },
-        include: {
-            profile: true,
-            userCredits: {
-                include: {
-                    creditsHistory: true,
-                },
-            },
-            creditsHistory: true,
         },
     });
     if (loggedInUser) {
